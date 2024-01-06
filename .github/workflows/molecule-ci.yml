@@ -2,10 +2,10 @@ name: Molecule CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
   schedule: # Schedule for every 15th of a month at 5AM
     - cron: '0 5 15 * *'
 
