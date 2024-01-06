@@ -1,0 +1,65 @@
+# Taken from https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/
+---
+- name: Install packages that allow apt to be used over HTTPS
+  become: true
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg-agent
+    - software-properties-common
+
+- name: Add an apt signing key for Docker
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add apt repository for Docker stable version
+  become: true
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable
+    state: present
+
+- name: Install Docker and its dependecies
+  become: true
+  apt: 
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+    - docker-ce 
+    - docker-ce-cli 
+    - containerd.io
+
+- name: Create the 'docker' group
+  become: yes
+  group:
+    name: docker
+    state: present
+  register: create_docker_group
+
+- name: Add the current user "{{ user }}" to the 'docker' group
+  become: yes
+  user:
+    name: "{{ user }}"
+    groups: docker
+    append: yes
+  when: create_docker_group.changed
+
+# - name: Switch to the 'docker' group for the current session "{{ user }}"
+#   command: newgrp docker
+#   become: yes
+#   become_user: "{{ user }}"
+
+- name:  Switch to the 'docker' group for the current session "{{ user }}" and run the hello-world Docker container
+  command: newgrp docker && docker run hello-world
+  become: yes
+  become_user: "{{ user }}"
+  when: create_docker_group.changed

@@ -1,0 +1,62 @@
+# source: https://snapcraft.io/install/k9s/ubuntu
+---
+- name: Install package dependencies.
+  become: true
+  package: 
+    name: "{{ item }}" 
+    state: present
+  with_items:
+    - snapd
+
+- name: Start snapd service
+  become: true
+  ansible.builtin.systemd:
+    name: snapd
+    state: started
+    enabled: yes
+
+- name: Ensure snapd.socket is started
+  become: true
+  ansible.builtin.systemd:
+    name: snapd.socket
+    state: started
+    enabled: yes
+
+- name: Ensure systemd-udevd.service is started
+  become: true
+  ansible.builtin.systemd:
+    name: systemd-udevd.service
+    state: started
+    enabled: yes
+  register: systemd_udevd_service
+
+- name: Run 'udevadm control --reload' command to ensure snapd is working
+  become: true
+  ansible.builtin.command: udevadm control --reload
+  register: udevadm_control
+  when: systemd_udevd_service.changed
+
+- name: Check if 'udevadm control --reload' is working
+  when: systemd_udevd_service.changed
+  ansible.builtin.debug:
+    msg: "udevadm control --reload: {{ udevadm_control }}"
+
+- name: Run 'snap list' command
+  changed_when: False
+  ansible.builtin.command: snap list
+  register: snap_list_output
+
+- name: Check if 'k9s' is installed
+  ansible.builtin.debug:
+    msg: "'k9s' is installed: {{ 'k9s' in snap_list_output.stdout }}"
+    # msg: "'k9s' is installed: {{ snap_list_output }}"
+
+- name: Install k9s via snap with --classic
+  become: true
+  ignore_errors: yes
+  community.general.snap:
+    classic: yes
+    state: present
+    name:
+      - k9s
+  when: "'k9s' not in snap_list_output.stdout"

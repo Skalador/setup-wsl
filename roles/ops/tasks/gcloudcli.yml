@@ -1,0 +1,33 @@
+#source: https://cloud.google.com/sdk/docs/install#deb
+---
+- name: Install package dependencies.
+  become: true
+  package: name={{ item }} state=present
+  with_items:
+    - ca-certificates
+    - curl
+    - gnupg
+    - apt-transport-https
+
+- name: Add an apt signing key for google-cloud-cli
+  become: true
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add apt repository for stable version
+  become: true
+  apt_repository:
+    repo: deb https://packages.cloud.google.com/apt cloud-sdk main
+    state: present
+
+- name: Install google-cloud-cli
+  become: true
+  apt: 
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+    - google-cloud-cli
+

@@ -1,0 +1,8 @@
+---
+- name: Check if zsh is installed
+  command: /bin/zsh --version
+  register: zsh_check
+    
+- name: Display verification results
+  debug:
+    msg: "ZSH is installed with {{ zsh_check.stdout }}"

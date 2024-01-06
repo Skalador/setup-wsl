@@ -1,0 +1,72 @@
+---
+- name: update package list
+  become: true
+  package:
+    update_cache: yes
+
+- name: upgrade all packages
+  become: true
+  package:
+    name: "*"
+    state: latest
+
+- name: Install packages
+  become: true
+  apt:
+    name: "{{ prerequisite_packages }}"
+
+- name: Install snapd package
+  become: true
+  ansible.builtin.apt:
+    name: snapd
+    state: present
+
+- name: Add snapd binary path to ~/.bashrc
+  lineinfile:
+    path: ~/.bashrc
+    line: 'export PATH=$PATH:/snap/bin'
+    create: true
+    state: present
+
+- name: Start snapd service
+  become: true
+  ansible.builtin.systemd:
+    name: snapd
+    state: started
+    enabled: yes
+
+- name: Ensure snapd.socket is started
+  become: true
+  ansible.builtin.systemd:
+    name: snapd.socket
+    state: started
+    enabled: yes
+
+- name: Ensure systemd-udevd.service is started
+  become: true
+  ansible.builtin.systemd:
+    name: systemd-udevd.service
+    state: started
+    enabled: yes
+  register: systemd_udevd_service
+
+- name: Run 'udevadm control --reload' command to ensure snapd is working
+  become: true
+  ansible.builtin.command: udevadm control --reload
+  register: udevadm_control
+  when: systemd_udevd_service.changed
+
+- name: Check if 'udevadm control --reload' is working
+  when: systemd_udevd_service.changed
+  ansible.builtin.debug:
+    msg: "udevadm control --reload: {{ udevadm_control }}"
+
+- name: Run 'snap install hello-world' command
+  become: true
+  changed_when: False # disabled for molecule idempotence test
+  ansible.builtin.command: snap install hello-world
+  register: snap_install_hello_world
+
+- name: Check if 'snap install hello-world' is working
+  ansible.builtin.debug:
+    msg: "snap install hello-word: {{ snap_install_hello_world }}"

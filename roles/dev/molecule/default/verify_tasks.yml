@@ -1,0 +1,41 @@
+---
+# - name: Check if go is installed
+# #  command: go version
+#   command: /snap/bin/go version
+#   register: go_check
+#     
+# - name: Display verification results
+#   debug:
+#     msg: "go is installed with {{ go_check.stdout }}"
+
+- name: Check if molecule is installed
+  command: molecule --version
+  register: molecule_check
+    
+- name: Display verification results
+  debug:
+    msg: "molecule is installed with {{ molecule_check.stdout }}"
+    
+- name: Check if syft is installed
+  command: syft --version
+  register: syft_check
+    
+- name: Display verification results
+  debug:
+    msg: "syft is installed with {{ syft_check.stdout }}"
+
+- name: Check if python3 is installed
+  command: python3 --version
+  register: python3_check
+    
+- name: Display verification results
+  debug:
+    msg: "python3 is installed with {{ python3_check.stdout }}"
+
+- name: Check if pip3 is installed
+  command: pip3 --version
+  register: pip3_check
+    
+- name: Display verification results
+  debug:
+    msg: "pip3 is installed with {{ pip3_check.stdout }}"

@@ -1,0 +1,47 @@
+---
+- name: Get the latest OpenToFu release information
+  uri:
+    url: "https://api.github.com/repos/opentofu/opentofu/releases/latest"
+    method: GET
+  register: latest_release_info
+
+- name: Parse the latest release version for amd64 and debian
+  set_fact:
+    latest_amd64_version: "{{ latest_release_info.json.assets | selectattr('name', 'match', '.*amd64.deb$') | first }}"
+  when: latest_release_info.status == 200
+
+- name: Check if /usr/bin/tofu exists
+  stat:
+    path: /usr/bin/tofu
+  register: tofu_file
+
+- name: Download the latest OpenToFu release for amd64
+  get_url:
+    url: "{{ latest_amd64_version.browser_download_url }}"
+    dest: /tmp/opentofu_latest_amd64.deb
+  register: tofu_download_bundle
+  when: 
+    - "latest_amd64_version is defined"
+    - "not tofu_file.stat.exists"
+
+- name: Install the opentofu .deb package
+  become: yes
+  command: dpkg -i /tmp/opentofu_latest_amd64.deb
+  when:  
+    - "latest_amd64_version is defined"
+    - tofu_download_bundle.changed
+    - "not tofu_file.stat.exists"
+
+- name: Remove opentofu download file 
+  ansible.builtin.file:
+    path: /tmp/opentofu_latest_amd64.deb
+    state: absent
+  when:  
+    - "latest_amd64_version is defined"
+    - tofu_download_bundle.changed
+    - "not tofu_file.stat.exists"
+
+- name: Notify when nothing to download
+  debug:
+    msg: "No new release found for Opentofu amd64 as *.deb ."
+  when: latest_amd64_version is not defined

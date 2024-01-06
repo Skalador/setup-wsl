@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  pre_tasks:
+    - name: Load 'user_environment' variables from File
+      include_vars:
+        file: ../../../../vars/user_environment.yml
+  tasks:
+    - name: Update apt cache (on Debian).
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Include shell role
+      include_role: 
+        name: ops

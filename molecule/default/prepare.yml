@@ -1,0 +1,20 @@
+---
+- name: Prepare System
+  hosts: all
+  #become: true  # If creating a user requires elevated privileges
+  pre_tasks:
+  - name: Load 'user_environment' variables from File
+    include_vars:
+      file: ../../vars/user_environment.yml
+
+  tasks:
+    - name: Create User without password
+      user:
+        name: "{{ user }}"
+        state: present
+        password: "*"
+    - name: Allow user to run sudo without password prompt
+      lineinfile:
+        dest: /etc/sudoers
+        line: "{{ user }} ALL=(ALL) NOPASSWD: ALL"
+        validate: 'visudo -cf %s'

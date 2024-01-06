@@ -1,0 +1,98 @@
+---
+- name: Check if docker is installed
+  command: docker --version
+  register: docker_check
+
+- name: Display verification results
+  debug:
+    msg: "docker is installed with {{ docker_check.stdout }}"
+
+- name: Check if podman is installed
+  command: podman --version
+  register: podman_check
+
+- name: Display verification results
+  debug:
+    msg: "podman is installed with {{ podman_check.stdout }}"
+
+- name: Check if kubectl is installed
+  command: kubectl version
+  register: kubectl_check
+  ignore_errors: true # required when no cluster is configured
+
+- name: Display verification results
+  debug:
+    msg: "kubectl is installed with {{ kubectl_check.stdout }}"
+
+- name: Check if kubeadm is installed
+  command: kubeadm --version
+  register: kubeadm_check
+  ignore_errors: true # required when no cluster is configured
+
+- name: Display verification results
+  debug:
+    msg: "kubeadm is installed with {{ kubeadm_check.stdout }}"
+
+- name: Check if kubelet is installed
+  command: kubelet --version
+  register: kubelet_check
+
+- name: Display verification results
+  debug:
+    msg: "kubelet is installed with {{ kubelet_check.stdout }}"
+
+- name: Check if helm is installed
+  command: helm version
+  register: helm_check
+
+- name: Display verification results
+  debug:
+    msg: "helm is installed with {{ helm_check.stdout }}"
+
+- name: Check if minikube is installed
+  command: minikube version
+  register: minikube_check
+
+- name: Display verification results
+  debug:
+    msg: "minikube is installed with {{ minikube_check.stdout }}"
+
+- name: Check if aws is installed
+  command: aws --version
+  register: aws_check
+
+- name: Display verification results
+  debug:
+    msg: "aws is installed with {{ aws_check.stdout }}"
+
+- name: Check if az is installed
+  command: az --version
+  register: az_check
+
+- name: Display verification results
+  debug:
+    msg: "az is installed with {{ az_check.stdout }}"
+
+- name: Check if gcloud is installed
+  command: gcloud --version
+  register: gcloud_check
+
+- name: Display verification results
+  debug:
+    msg: "gcloud is installed with {{ gcloud_check.stdout }}"
+
+- name: Check if tofu is installed
+  command: tofu --version
+  register: tofu_check
+
+- name: Display verification results
+  debug:
+    msg: "tofu is installed with {{ tofu_check.stdout }}"
+
+- name: Check if skopeo is installed
+  command: skopeo --version
+  register: skopeo_check
+
+- name: Display verification results
+  debug:
+    msg: "skopeo is installed with {{ skopeo_check.stdout }}"

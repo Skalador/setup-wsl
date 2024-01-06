@@ -1,0 +1,5 @@
+# Languages
+- include_tasks: python.yml
+- include_tasks: syft.yml
+- include_tasks: molecule.yml
+- include_tasks: go.yml

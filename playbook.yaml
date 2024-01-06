@@ -1,0 +1,14 @@
+- hosts: all
+
+  vars_files:
+    - vars/prerequisite_packages.yml
+    - vars/user_environment.yml
+
+  roles:
+    - packages
+    - shell
+    - dev
+    - ops
+
+  ### Change to your user! ###
+  user: kevin

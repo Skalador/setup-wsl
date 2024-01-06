@@ -1,0 +1,9 @@
+---
+- name: Verify
+  hosts: all
+
+  tasks:
+    - include_tasks: ../../roles/packages/molecule/default/verify_tasks.yml
+    - include_tasks: ../../roles/shell/molecule/default/verify_tasks.yml
+    - include_tasks: ../../roles/dev/molecule/default/verify_tasks.yml
+    - include_tasks: ../../roles/ops/molecule/default/verify_tasks.yml

@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  pre_tasks:
+    - name: Load 'prerequisite_packages' variables from File
+      include_vars:
+        file: ../../../../vars/prerequisite_packages.yml
+  tasks:
+    - name: Include packages role
+      include_role: 
+        name: packages

@@ -1,0 +1,18 @@
+---
+- name: Install Python3
+  become: yes
+  apt:
+    name: python3
+    state: present
+
+- name: Install Pip3
+  become: yes
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Install Python3 virtual environment
+  become: yes
+  apt:
+    name: python3-venv
+    state: present

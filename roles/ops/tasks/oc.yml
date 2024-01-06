@@ -1,0 +1,57 @@
+---
+- name: Remove file ~/oc-linux.tar.gz in case a of previously erroneous ansible runs
+  ansible.builtin.file:
+    path: ~/oc-linux.tar.gz
+    state: absent
+
+- name: Download oc client tool for latest OpenShift Version 
+  ansible.builtin.get_url:
+    url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz"
+    dest: ~/oc-linux.tar.gz
+  register: oc_download_bundle
+
+- name: Extract oc-linux.tar.gz into ~/
+  when: oc_download_bundle.changed
+  ansible.builtin.unarchive:
+    src: ~/oc-linux.tar.gz
+    dest: ~/
+
+- name: Copy oc binary with owner and permissions to /usr/local/bin
+  ansible.builtin.copy:
+    src: ~/oc
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Copy kubectl binary with owner and permissions to /usr/local/bin
+  ansible.builtin.copy:
+    src: ~/kubectl
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Remove file ~/oc-linux.tar.gz 
+  when: oc_download_bundle.changed
+  ansible.builtin.file:
+    path: ~/oc-linux.tar.gz
+    state: absent
+
+- name: Remove file ~/README.md
+  when: oc_download_bundle.changed
+  ansible.builtin.file:
+    path: ~/README.md
+    state: absent
+
+- name: Remove file ~/oc 
+  when: oc_download_bundle.changed
+  ansible.builtin.file:
+    path: ~/oc
+    state: absent
+
+- name: Remove file ~/kubectl 
+  when: oc_download_bundle.changed
+  ansible.builtin.file:
+    path: ~/kubectl
+    state: absent

@@ -1,0 +1,37 @@
+# source: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+---
+- name: Install package dependencies.
+  become: true
+  package: 
+    name: "{{ item }}" 
+    state: present
+  with_items:
+    - unzip
+
+- name: Download the awscli bundle.
+  get_url: 
+    url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip 
+    dest: /tmp/awscliv2.zip
+  register: aws_cli_download_bundle
+
+- name: Ensure unzip is available
+  command: "which unzip"
+  register: unzip_location
+  changed_when: false
+  failed_when: "'unzip' not in unzip_location.stdout"
+
+- name: Unarchive the installer.
+  ansible.builtin.unarchive: 
+    src: /tmp/awscliv2.zip 
+    dest: /tmp 
+    copy: no 
+    creates: /tmp/aws
+  when: aws_cli_download_bundle.changed
+  register: aws_cli_unarchive_installer
+
+- name: Install awscli package.
+  become: yes
+  shell: /tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+  args:
+    creates: /usr/local/aws-cli
+  when: aws_cli_unarchive_installer.changed

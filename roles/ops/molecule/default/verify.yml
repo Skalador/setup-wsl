@@ -1,0 +1,6 @@
+---
+- name: Verify
+  hosts: all
+
+  tasks:
+    - include_tasks: ./verify_tasks.yml

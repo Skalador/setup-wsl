@@ -1,0 +1,32 @@
+---
+- name: Check if /usr/bin/minikube exists
+  stat:
+    path: /usr/bin/minikube
+  register: minikube_file
+
+- name: Install Minikube
+  become: true
+  apt:
+    deb: "https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb"
+    state: present
+  when: "not minikube_file.stat.exists"
+
+- name: Check if ~/.zshrc exists
+  stat:
+    path: ~/.zshrc
+  register: zshrc_file
+
+- name: Minikube shell completion for zsh 
+  ansible.builtin.lineinfile:
+    path: ~/.zshrc
+    line: 'source <(minikube completion zsh)'
+  when: zshrc_file.stat.exists
+#  state: present
+#  create: yes
+
+- name: Minikube shell completion for bash 
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: 'source <(minikube completion bash)'
+#  state: present
+#  create: yes

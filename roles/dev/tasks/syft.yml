@@ -1,0 +1,22 @@
+---
+- name: Install package dependencies.
+  become: true
+  package: 
+    name: "{{ item }}" 
+    state: present
+  with_items:
+    - curl
+
+- name: Check if /usr/local/bin/syft exists
+  stat:
+    path: /usr/local/bin/syft
+  register: syft_file_stat
+
+- name: Check for syft_file_stat
+  ansible.builtin.debug:
+    msg: "Variable syft_file_stat contains: {{ syft_file_stat }}"
+
+- name: Install syft
+  become: yes
+  shell: bash -c  "$(curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin)"
+  when: "not syft_file_stat.stat.exists"
