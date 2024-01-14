@@ -1,7 +1,7 @@
 ---
-- name: Download butane tool 
+- name: Download butane tool
   ansible.builtin.get_url:
-    url:  https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-amd64
+    url: https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-amd64
     dest: ~/butane
 
 - name: Copy butane binary with owner and permissions to /usr/local/bin
@@ -12,7 +12,7 @@
     group: root
     mode: '0755'
 
-- name: Remove file ~/butane 
+- name: Remove file ~/butane
   ansible.builtin.file:
     path: ~/butane
     state: absent

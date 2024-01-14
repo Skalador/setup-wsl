@@ -2,7 +2,7 @@
 - name: Check if snapd is installed
   command: snap --version
   register: snapd_check
-    
+
 - name: Display verification results
   debug:
     msg: "Snapd is installed with {{ snapd_check.stdout }}"

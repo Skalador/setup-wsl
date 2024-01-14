@@ -1,11 +1,11 @@
 ---
 - name: Prepare System
   hosts: all
-  #become: true  # If creating a user requires elevated privileges
+  # become: true    # If creating a user requires elevated privileges
   pre_tasks:
-  - name: Load 'user_environment' variables from File
-    include_vars:
-      file: ../../vars/user_environment.yml
+    - name: Load 'user_environment' variables from File
+      include_vars:
+        file: ../../vars/user_environment.yml
 
   tasks:
     - name: Create User without password

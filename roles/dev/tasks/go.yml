@@ -1,8 +1,8 @@
 ---
 - name: Install package dependencies.
   become: true
-  package: 
-    name: "{{ item }}" 
+  package:
+    name: "{{ item }}"
     state: present
   with_items:
     - snapd
@@ -12,21 +12,21 @@
   ansible.builtin.systemd:
     name: snapd
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure snapd.socket is started
   become: true
   ansible.builtin.systemd:
     name: snapd.socket
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure systemd-udevd.service is started
   become: true
   ansible.builtin.systemd:
     name: systemd-udevd.service
     state: started
-    enabled: yes
+    enabled: true
   register: systemd_udevd_service
 
 - name: Run 'udevadm control --reload' command to ensure snapd is working
@@ -41,7 +41,7 @@
     msg: "udevadm control --reload: {{ udevadm_control }}"
 
 - name: Run 'snap list' command
-  changed_when: False
+  changed_when: false
   ansible.builtin.command: snap list
   register: snap_list_output
 
@@ -52,10 +52,10 @@
 
 - name: Install go via snap with --classic
   become: true
-  # ignore_errors: yes
+  # ignore_errors: true
   community.general.snap:
     state: present
-    classic: yes
+    classic: true
     name:
       - go
   when: "'go' not in snap_list_output.stdout"
@@ -64,30 +64,30 @@
 # - name: Fetch latest Go version
 #   shell: 'curl -s https://go.dev/dl/ | grep -o "go[0-9.]\+\\.linux-amd64.tar.gz" | head -n 1'
 #   register: go_version_output
-# 
+#
 # - name: Download go tar file
 #   get_url: url=https://go.dev/dl/{{ go_version_output.stdout }} dest=/tmp/{{ go_version_output.stdout }}
 #   register: go_download_bundle
-# 
+#
 # - name: Delete previous installation
 #   command: rm -rf /usr/local/go
 #   become: true
-# 
+#
 # - name: Extract and move new go folder to /usr/local
 #   unarchive: src=/tmp/{{ go_version_output.stdout }} dest=/usr/local copy=no creates=/usr/local/go
 #   when: go_download_bundle.changed
 #   become: true
-# 
+#
 # - name: Delete downloaded tar file
 #   shell: rm -rf /tmp/{{ go_version_output.stdout }}*
-# 
+#
 # - name: Add go binary path to ~/.profile
 #   lineinfile:
 #     path: ~/.profile
 #     line: 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin'
 #     create: true
 #     state: present
-# 
+#
 # - name: Add go env to zsh
 #   ansible.builtin.lineinfile:
 #     path: "~/.zshrc"

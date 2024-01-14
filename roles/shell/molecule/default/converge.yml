@@ -13,5 +13,5 @@
         cache_valid_time: 3600
 
     - name: Include shell role
-      include_role: 
+      include_role:
         name: shell

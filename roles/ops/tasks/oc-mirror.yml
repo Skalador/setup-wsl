@@ -4,7 +4,7 @@
     path: ~/oc-mirror.tar.gz
     state: absent
 
-- name: Download oc client tool for latest OpenShift Version 
+- name: Download oc client tool for latest OpenShift Version
   ansible.builtin.get_url:
     url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/oc-mirror.tar.gz"
     dest: ~/oc-mirror.tar.gz
@@ -16,7 +16,7 @@
     src: ~/oc-mirror.tar.gz
     dest: /usr/local/bin
 
-- name: Remove file ~/oc-mirror.tar.gz 
+- name: Remove file ~/oc-mirror.tar.gz
   when: oc_mirror_download_bundle.changed
   ansible.builtin.file:
     path: ~/oc-mirror.tar.gz

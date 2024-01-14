@@ -5,7 +5,7 @@
     url: https://baltocdn.com/helm/signing.asc
     state: present
 
-- name: Add apt repository for Helm 
+- name: Add apt repository for Helm
   become: true
   apt_repository:
     repo: deb https://baltocdn.com/helm/stable/debian/ all main
@@ -14,10 +14,10 @@
 
 - name: Install helm
   become: true
-  apt: 
+  apt:
     name: "{{ packages }}"
     state: present
-    update_cache: yes
+    update_cache: true
   vars:
     packages:
       - helm

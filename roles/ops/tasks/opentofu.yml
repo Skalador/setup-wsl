@@ -20,23 +20,23 @@
     url: "{{ latest_amd64_version.browser_download_url }}"
     dest: /tmp/opentofu_latest_amd64.deb
   register: tofu_download_bundle
-  when: 
+  when:
     - "latest_amd64_version is defined"
     - "not tofu_file.stat.exists"
 
 - name: Install the opentofu .deb package
-  become: yes
+  become: true
   command: dpkg -i /tmp/opentofu_latest_amd64.deb
-  when:  
+  when:
     - "latest_amd64_version is defined"
     - tofu_download_bundle.changed
     - "not tofu_file.stat.exists"
 
-- name: Remove opentofu download file 
+- name: Remove opentofu download file
   ansible.builtin.file:
     path: /tmp/opentofu_latest_amd64.deb
     state: absent
-  when:  
+  when:
     - "latest_amd64_version is defined"
     - tofu_download_bundle.changed
     - "not tofu_file.stat.exists"

@@ -1,11 +1,11 @@
 ---
-- name: Install podman 
+- name: Install podman
   become: true
-  apt: 
+  apt:
     name: "{{ packages }}"
     state: present
-    update_cache: yes
+    update_cache: true
   vars:
     packages:
-    - podman
-    - podman-toolbox
+      - podman
+      - podman-toolbox

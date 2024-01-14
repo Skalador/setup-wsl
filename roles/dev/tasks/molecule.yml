@@ -6,6 +6,6 @@
     - python3-pip
 
 - name: Install Molecule
-  become: yes
+  become: true
   pip:
     name: molecule

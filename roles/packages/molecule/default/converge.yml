@@ -8,5 +8,5 @@
         file: ../../../../vars/prerequisite_packages.yml
   tasks:
     - name: Include packages role
-      include_role: 
+      include_role:
         name: packages

@@ -1,4 +1,4 @@
-#source: https://cloud.google.com/sdk/docs/install#deb
+# source: https://cloud.google.com/sdk/docs/install#deb
 ---
 - name: Install package dependencies.
   become: true
@@ -23,11 +23,10 @@
 
 - name: Install google-cloud-cli
   become: true
-  apt: 
+  apt:
     name: "{{ packages }}"
     state: present
-    update_cache: yes
+    update_cache: true
   vars:
     packages:
-    - google-cloud-cli
-
+      - google-cloud-cli

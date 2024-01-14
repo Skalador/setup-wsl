@@ -1,14 +1,14 @@
 ---
 - name: Install package dependencies.
   become: true
-  package: 
-    name: "{{ item }}" 
+  package:
+    name: "{{ item }}"
     state: present
   with_items:
     - curl
 
 - name: install zsh and friends
-  become: True
+  become: true
   become_user: root
   package: name={{ item }}
   with_items:
@@ -17,15 +17,15 @@
     - zsh
 
 - name: Check the shell of "{{ user }}"
-  changed_when: False
+  changed_when: false
   ansible.builtin.shell:
     cmd: "getent passwd {{ user }} | cut -d: -f7"
   register: user_shell_result
 
 - name: change user shell to zsh
-  become: yes
+  become: true
   become_user: root
-  command: chsh -s /bin/zsh {{ user }} 
+  command: chsh -s /bin/zsh {{ user }}
   when: "'/bin/zsh' not in user_shell_result.stdout"
 
 - name: Check for oh-my-zsh
@@ -45,7 +45,7 @@
   when: not dircolors.stat.exists
 
 - name: Check for powerlevel10k
-  stat: 
+  stat:
     path: /$HOME/.oh-my-zsh/custom/themes/powerlevel10k
   register: powerlevel10k
 
@@ -56,13 +56,13 @@
 - name: Clone powerlevel10k
   command: git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k
   when: not powerlevel10k.stat.exists
-  # ignore_errors: yes
+  # ignore_errors: true
 
 - name: Check if ~/.dircolors contains "DIR 34"
   shell: "grep -q 'DIR 34' ~/.dircolors"
-  register: grep_result # if the string is found, the return code is 0
+  register: grep_result   # if the string is found, the return code is 0
   changed_when: false
-  ignore_errors: yes #return code after the first run will be 1, thus ignore_errors for mutliple runs
+  ignore_errors: true   # return code after the first run will be 1, thus ignore_errors for mutliple runs
   failed_when: grep_result.rc == 2  # Set this condition to handle the absence of "DIR 34"
 
 - name: Update ~/.dircolors to not have dark blue directories

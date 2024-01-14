@@ -18,7 +18,7 @@
 - name: Check if kubectl is installed
   command: kubectl version
   register: kubectl_check
-  ignore_errors: true # required when no cluster is configured
+  ignore_errors: true   # required when no cluster is configured
 
 - name: Display verification results
   debug:
@@ -27,7 +27,7 @@
 - name: Check if kubeadm is installed
   command: kubeadm --version
   register: kubeadm_check
-  ignore_errors: true # required when no cluster is configured
+  ignore_errors: true   # required when no cluster is configured
 
 - name: Display verification results
   debug:

@@ -1,4 +1,4 @@
-#source: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
+# source: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
 ---
 - name: Install package dependencies.
   become: true
@@ -34,15 +34,15 @@
 
 - name: Install azure-cli
   become: true
-  apt: 
+  apt:
     name: "{{ packages }}"
     state: present
-    update_cache: yes
+    update_cache: true
   vars:
     packages:
-    - azure-cli 
+      - azure-cli
 
 # Nice try microsoft ;)
 # - name: Install azure cli
-#   become: yes
+#   become: true
 #   command: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash

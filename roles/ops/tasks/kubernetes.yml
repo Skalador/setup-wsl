@@ -13,16 +13,16 @@
     state: present
     filename: kubernetes.list
 
-- name: Install kubeadm and kubectl 
+- name: Install kubeadm and kubectl
   become: true
-  apt: 
+  apt:
     name: "{{ packages }}"
     state: present
-    update_cache: yes
+    update_cache: true
   vars:
     packages:
       - kubelet
-      - kubeadm 
+      - kubeadm
       - kubectl
 
 - name: Add kubectl autocompletion for bash
@@ -48,7 +48,7 @@
 # - name: Check for krew
 #   stat: path=/$HOME/.krew
 #   register: krew
-# 
+#
 # - name: Install krew
 #   shell: |
 #     set -x; cd "$(mktemp -d)" &&
@@ -59,11 +59,11 @@
 #     KREW=./krew-"${OS}_${ARCH}" &&
 #     "$KREW" install krew
 #   when: not krew.stat.exists
-# 
+#
 # - name: Get installed krew plugins
 #   command: "kubectl krew list"
 #   register: "krew_plugins"
-# 
+#
 # - name: Install krew plugins
 #   command: "kubectl krew install {{ item }}"
 #   when: "item|string not in krew_plugins.stdout_lines"

@@ -16,7 +16,7 @@
     path: ~/.zshrc
   register: zshrc_file
 
-- name: Minikube shell completion for zsh 
+- name: Minikube shell completion for zsh
   ansible.builtin.lineinfile:
     path: ~/.zshrc
     line: 'source <(minikube completion zsh)'
@@ -24,7 +24,7 @@
 #  state: present
 #  create: yes
 
-- name: Minikube shell completion for bash 
+- name: Minikube shell completion for bash
   ansible.builtin.lineinfile:
     path: ~/.bashrc
     line: 'source <(minikube completion bash)'

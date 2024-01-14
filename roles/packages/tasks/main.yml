@@ -2,7 +2,7 @@
 - name: update package list
   become: true
   package:
-    update_cache: yes
+    update_cache: true
 
 - name: upgrade all packages
   become: true
@@ -33,21 +33,21 @@
   ansible.builtin.systemd:
     name: snapd
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure snapd.socket is started
   become: true
   ansible.builtin.systemd:
     name: snapd.socket
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure systemd-udevd.service is started
   become: true
   ansible.builtin.systemd:
     name: systemd-udevd.service
     state: started
-    enabled: yes
+    enabled: true
   register: systemd_udevd_service
 
 - name: Run 'udevadm control --reload' command to ensure snapd is working
@@ -63,7 +63,7 @@
 
 - name: Run 'snap install hello-world' command
   become: true
-  changed_when: False # disabled for molecule idempotence test
+  changed_when: false   # disabled for molecule idempotence test
   ansible.builtin.command: snap install hello-world
   register: snap_install_hello_world
 

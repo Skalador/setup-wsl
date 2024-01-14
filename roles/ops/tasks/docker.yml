@@ -5,14 +5,14 @@
   apt:
     name: "{{ packages }}"
     state: present
-    update_cache: yes
+    update_cache: true
   vars:
     packages:
-    - apt-transport-https
-    - ca-certificates
-    - curl
-    - gnupg-agent
-    - software-properties-common
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
 
 - name: Add an apt signing key for Docker
   become: true
@@ -28,38 +28,38 @@
 
 - name: Install Docker and its dependecies
   become: true
-  apt: 
+  apt:
     name: "{{ packages }}"
     state: present
-    update_cache: yes
+    update_cache: true
   vars:
     packages:
-    - docker-ce 
-    - docker-ce-cli 
-    - containerd.io
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
 
 - name: Create the 'docker' group
-  become: yes
+  become: true
   group:
     name: docker
     state: present
   register: create_docker_group
 
 - name: Add the current user "{{ user }}" to the 'docker' group
-  become: yes
+  become: true
   user:
     name: "{{ user }}"
     groups: docker
-    append: yes
+    append: true
   when: create_docker_group.changed
 
 # - name: Switch to the 'docker' group for the current session "{{ user }}"
 #   command: newgrp docker
-#   become: yes
+#   become: true
 #   become_user: "{{ user }}"
 
-- name:  Switch to the 'docker' group for the current session "{{ user }}" and run the hello-world Docker container
+- name: Switch to the 'docker' group for the current session "{{ user }}" and run the hello-world Docker container
   command: newgrp docker && docker run hello-world
-  become: yes
+  become: true
   become_user: "{{ user }}"
   when: create_docker_group.changed

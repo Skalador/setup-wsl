@@ -4,7 +4,7 @@
     path: ~/oc-linux.tar.gz
     state: absent
 
-- name: Download oc client tool for latest OpenShift Version 
+- name: Download oc client tool for latest OpenShift Version
   ansible.builtin.get_url:
     url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz"
     dest: ~/oc-linux.tar.gz
@@ -32,7 +32,7 @@
     group: root
     mode: '0755'
 
-- name: Remove file ~/oc-linux.tar.gz 
+- name: Remove file ~/oc-linux.tar.gz
   when: oc_download_bundle.changed
   ansible.builtin.file:
     path: ~/oc-linux.tar.gz
@@ -44,13 +44,13 @@
     path: ~/README.md
     state: absent
 
-- name: Remove file ~/oc 
+- name: Remove file ~/oc
   when: oc_download_bundle.changed
   ansible.builtin.file:
     path: ~/oc
     state: absent
 
-- name: Remove file ~/kubectl 
+- name: Remove file ~/kubectl
   when: oc_download_bundle.changed
   ansible.builtin.file:
     path: ~/kubectl

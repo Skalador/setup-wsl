@@ -1,8 +1,8 @@
 ---
 - name: Install package dependencies.
   become: true
-  package: 
-    name: "{{ item }}" 
+  package:
+    name: "{{ item }}"
     state: present
   with_items:
     - curl
@@ -17,6 +17,6 @@
     msg: "Variable syft_file_stat contains: {{ syft_file_stat }}"
 
 - name: Install syft
-  become: yes
+  become: true
   shell: bash -c  "$(curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin)"
   when: "not syft_file_stat.stat.exists"

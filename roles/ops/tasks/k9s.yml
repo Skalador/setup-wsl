@@ -2,8 +2,8 @@
 ---
 - name: Install package dependencies.
   become: true
-  package: 
-    name: "{{ item }}" 
+  package:
+    name: "{{ item }}"
     state: present
   with_items:
     - snapd
@@ -13,21 +13,21 @@
   ansible.builtin.systemd:
     name: snapd
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure snapd.socket is started
   become: true
   ansible.builtin.systemd:
     name: snapd.socket
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure systemd-udevd.service is started
   become: true
   ansible.builtin.systemd:
     name: systemd-udevd.service
     state: started
-    enabled: yes
+    enabled: true
   register: systemd_udevd_service
 
 - name: Run 'udevadm control --reload' command to ensure snapd is working
@@ -42,7 +42,7 @@
     msg: "udevadm control --reload: {{ udevadm_control }}"
 
 - name: Run 'snap list' command
-  changed_when: False
+  changed_when: false
   ansible.builtin.command: snap list
   register: snap_list_output
 
@@ -53,9 +53,9 @@
 
 - name: Install k9s via snap with --classic
   become: true
-  ignore_errors: yes
+  ignore_errors: true
   community.general.snap:
-    classic: yes
+    classic: true
     state: present
     name:
       - k9s
