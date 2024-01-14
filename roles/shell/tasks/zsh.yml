@@ -16,16 +16,16 @@
     - powerline
     - zsh
 
-- name: Check the shell of "{{ user }}"
+- name: Check the shell of "{{ lookup('env', 'USER') }}"
   changed_when: false
   ansible.builtin.shell:
-    cmd: "getent passwd {{ user }} | cut -d: -f7"
+    cmd: "getent passwd {{ lookup('env', 'USER') }} | cut -d: -f7"
   register: user_shell_result
 
 - name: change user shell to zsh
   become: true
   become_user: root
-  command: chsh -s /bin/zsh {{ user }}
+  command: chsh -s /bin/zsh {{ lookup('env', 'USER') }}
   when: "'/bin/zsh' not in user_shell_result.stdout"
 
 - name: Check for oh-my-zsh
