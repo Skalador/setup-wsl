@@ -6,6 +6,7 @@
 
 - name: upgrade all packages
   become: true
+  changed_when: false
   package:
     name: "*"
     state: latest
