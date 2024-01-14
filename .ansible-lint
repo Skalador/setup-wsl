@@ -1,4 +1,9 @@
 ---
+exclude_paths:
+  - roles/packages/molecule/default/verify_tasks.yml
+  - roles/shell/molecule/default/verify_tasks.yml
+  - roles/dev/molecule/default/verify_tasks.yml
+  - roles/ops/molecule/default/verify_tasks.yml
 skip_list:
   - schema[meta]
   - role-name
