@@ -1,18 +1,41 @@
 ---
+- name: Install package dependencies.
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - unzip
+
+- name: Check if /usr/local/bin/butane exists
+  stat:
+    path: /usr/local/bin/butane
+  register: butane_file_stat
+
+- name: Check for butane_file_stat
+  ansible.builtin.debug:
+    msg: "Variable butane_file_stat contains: {{ butane_file_stat }}"
+
 - name: Download butane tool
   ansible.builtin.get_url:
     url: https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-amd64
-    dest: ~/butane
+    dest: /tmp/butane
+  register: butane_download_bundle
+  when: "not butane_file_stat.stat.exists"
 
 - name: Copy butane binary with owner and permissions to /usr/local/bin
+  become: true
   ansible.builtin.copy:
-    src: ~/butane
+    src: /tmp/butane
     dest: /usr/local/bin/butane
     owner: root
     group: root
     mode: '0755'
+    remote_src: 'yes'
+  when: butane_download_bundle.changed
 
-- name: Remove file ~/butane
+- name: Remove file /tmp/butane
   ansible.builtin.file:
-    path: ~/butane
+    path: /tmp/butane
     state: absent
+  when: butane_download_bundle.changed

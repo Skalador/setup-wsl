@@ -1,57 +1,78 @@
 ---
-- name: Remove file ~/oc-linux.tar.gz in case a of previously erroneous ansible runs
-  ansible.builtin.file:
-    path: ~/oc-linux.tar.gz
-    state: absent
+- name: Install package dependencies.
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - unzip
+
+- name: Check if /usr/local/bin/oc exists
+  stat:
+    path: /usr/local/bin/oc
+  register: oc_file_stat
+
+- name: Check for oc_file_stat
+  ansible.builtin.debug:
+    msg: "Variable oc_file_stat contains: {{ oc_file_stat }}"
 
 - name: Download oc client tool for latest OpenShift Version
   ansible.builtin.get_url:
     url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz"
-    dest: ~/oc-linux.tar.gz
+    dest: /tmp/oc-linux.tar.gz
   register: oc_download_bundle
+  when: "not oc_file_stat.stat.exists"
 
-- name: Extract oc-linux.tar.gz into ~/
+- name: Extract oc-linux.tar.gz into /tmp/
   when: oc_download_bundle.changed
   ansible.builtin.unarchive:
-    src: ~/oc-linux.tar.gz
-    dest: ~/
+    src: /tmp/oc-linux.tar.gz
+    dest: /tmp
+    copy: false
+  register: oc_unarchive_download_bundle
 
 - name: Copy oc binary with owner and permissions to /usr/local/bin
+  become: true
   ansible.builtin.copy:
-    src: ~/oc
+    src: /tmp/oc
     dest: /usr/local/bin
     owner: root
     group: root
     mode: '0755'
+    remote_src: true
+  when: oc_unarchive_download_bundle.changed
 
 - name: Copy kubectl binary with owner and permissions to /usr/local/bin
+  become: true
   ansible.builtin.copy:
-    src: ~/kubectl
+    src: /tmp/kubectl
     dest: /usr/local/bin
     owner: root
     group: root
     mode: '0755'
+    remote_src: true
+  when: oc_unarchive_download_bundle.changed
 
-- name: Remove file ~/oc-linux.tar.gz
+- name: Remove file /tmp/oc-linux.tar.gz
   when: oc_download_bundle.changed
   ansible.builtin.file:
-    path: ~/oc-linux.tar.gz
+    path: /tmp/oc-linux.tar.gz
     state: absent
 
-- name: Remove file ~/README.md
-  when: oc_download_bundle.changed
+- name: Remove file /tmp/README.md
+  when: oc_unarchive_download_bundle.changed
   ansible.builtin.file:
-    path: ~/README.md
+    path: /tmp/README.md
     state: absent
 
-- name: Remove file ~/oc
-  when: oc_download_bundle.changed
+- name: Remove file /tmp/oc
+  when: oc_unarchive_download_bundle.changed
   ansible.builtin.file:
-    path: ~/oc
+    path: /tmp/oc
     state: absent
 
-- name: Remove file ~/kubectl
-  when: oc_download_bundle.changed
+- name: Remove file /tmp/kubectl
+  when: oc_unarchive_download_bundle.changed
   ansible.builtin.file:
-    path: ~/kubectl
+    path: /tmp/kubectl
     state: absent

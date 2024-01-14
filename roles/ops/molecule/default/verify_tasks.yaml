@@ -96,3 +96,27 @@
 - name: Display verification results
   debug:
     msg: "skopeo is installed with {{ skopeo_check.stdout }}"
+
+- name: Check if oc is installed
+  command: oc version
+  register: oc_check
+
+- name: Display verification results
+  debug:
+    msg: "oc is installed with {{ oc_check.stdout }}"
+
+- name: Check if oc mirror is installed
+  command: oc mirror version
+  register: oc_mirror_check
+
+- name: Display verification results
+  debug:
+    msg: "oc mirror is installed with {{ oc_mirror_check.stdout }}"
+
+- name: Check if butane is installed
+  command: butane --version
+  register: butane_check
+
+- name: Display verification results
+  debug:
+    msg: "butane is installed with {{ butane_check.stdout }}"
