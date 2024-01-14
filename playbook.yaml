@@ -2,8 +2,8 @@
 - hosts: all
 
   vars_files:
-    - vars/prerequisite_packages.yml
-    - vars/user_environment.yml
+    - vars/prerequisite_packages.yaml
+    - vars/user_environment.yaml
 
   roles:
     - packages

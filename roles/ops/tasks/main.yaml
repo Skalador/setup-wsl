@@ -1,0 +1,15 @@
+---
+- include_tasks: docker.yaml
+- include_tasks: podman.yaml
+- include_tasks: kubernetes.yaml
+- include_tasks: helm.yaml
+- include_tasks: minikube.yaml
+- include_tasks: awscli.yaml
+- include_tasks: azurecli.yaml
+- include_tasks: gcloudcli.yaml
+- include_tasks: opentofu.yaml
+- include_tasks: k9s.yaml
+- include_tasks: skopeo.yaml
+# - include_tasks: oc.yaml
+# - include_tasks: oc-mirror.yaml
+# - include_tasks: butane.yaml

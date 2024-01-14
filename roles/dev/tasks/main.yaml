@@ -1,5 +1,5 @@
 ---
-- include_tasks: python.yml
-- include_tasks: syft.yml
-- include_tasks: molecule.yml
-- include_tasks: go.yml
+- include_tasks: python.yaml
+- include_tasks: syft.yaml
+- include_tasks: molecule.yaml
+- include_tasks: go.yaml

@@ -5,7 +5,7 @@
   # pre_tasks:
   #   - name: Load 'user_environment' variables from File
   #     include_vars:
-  #       file: ../../../../vars/user_environment.yml
+  #       file: ../../../../vars/user_environment.yaml
   tasks:
     - name: Update apt cache (on Debian).
       ansible.builtin.apt:

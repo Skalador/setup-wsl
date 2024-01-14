@@ -29,9 +29,6 @@ Run the following:
 # Clone to your home directory
 git clone https://github.com/Skalador/setup-wsl.git
 
-# (Required) Set your username in playbook.yaml. While you're at it, check out the roles and vars_files too.
-# (Required) Set your username in user_environment.yml
-
 # Installs ansible and dependencies
 sudo ./bootstrap.sh
 
@@ -62,4 +59,4 @@ cd roles/<role_name>/
 molecule test
 ```
 
-The [tests](https://github.com/Skalador/setup-wsl/blob/master/molecule/default/molecule.yml) rely on docker images from [Jeff Geerling](https://github.com/geerlingguy). Those images  ensure the docker container behaves like a usual VM (systemd,...).
+The [tests](https://github.com/Skalador/setup-wsl/blob/master/molecule/default/molecule.yaml) rely on docker images from [Jeff Geerling](https://github.com/geerlingguy). Those images  ensure the docker container behaves like a usual VM (systemd,...).
