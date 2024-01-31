@@ -2,7 +2,9 @@
 ---
 - name: Install package dependencies.
   become: true
-  package: name={{ item }} state=present
+  package:
+    name: "{{ item }}"
+    state: present
   with_items:
     - ca-certificates
     - curl

@@ -36,18 +36,18 @@
     dest: /tmp
     copy: false
     creates: /tmp/aws
-  when: aws_cli_download_bundle.changed
+  when: aws_cli_download_bundle is defined
   register: aws_cli_unarchive_installer
 
 - name: Install awscli package.
   become: true
-  shell: /tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+  ansible.builtin.command: /tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
   args:
     creates: /usr/local/aws-cli
-  when: aws_cli_unarchive_installer.changed
+  when: aws_cli_unarchive_installer is defined
 
 - name: Remove file /tmp/awscliv2.zip
   ansible.builtin.file:
     path: /tmp/awscliv2.zip
     state: absent
-  when: aws_cli_download_bundle.changed
+  when: aws_cli_download_bundle is defined

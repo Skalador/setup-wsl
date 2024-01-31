@@ -8,4 +8,5 @@
         update_cache: true
         cache_valid_time: 3600
 
-- ansible.builtin.import_playbook: ../../playbook.yaml
+- name: Import playbook
+  ansible.builtin.import_playbook: ../../playbook.yaml

@@ -53,7 +53,7 @@
 
 - name: Install k9s via snap with --classic
   become: true
-  ignore_errors: true
+  # ignore_errors: true
   community.general.snap:
     classic: true
     state: present

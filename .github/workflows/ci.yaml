@@ -31,9 +31,9 @@ jobs:
         run: |
           yamllint .
 
-#      - name: Lint code with ansible-lint.
-#        run: |
-#          ansible-lint
+      - name: Lint code with ansible-lint.
+        run: |
+          ansible-lint
 
   integration:
     name: Integration

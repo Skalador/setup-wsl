@@ -1,10 +1,10 @@
 ---
-- name: update package list
+- name: Update package list
   become: true
   package:
     update_cache: true
 
-- name: upgrade all packages
+- name: Upgrade all packages
   become: true
   changed_when: false
   package:
