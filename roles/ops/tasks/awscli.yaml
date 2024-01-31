@@ -41,7 +41,7 @@
 
 - name: Install awscli package.
   become: true
-  shell: /tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+  ansible.builtin.command: /tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
   args:
     creates: /usr/local/aws-cli
   when: aws_cli_unarchive_installer.changed

@@ -38,7 +38,7 @@ ansible-playbook -K playbook.yaml
 
 ## What do you get?
 
-This playbook contains four roles. Each role focuses on a specific task. To see the included packages follow the links below:
+This playbook contains four roles. Each role focuses on a specific capability. To see the included packages follow the links below:
 - [packages](https://github.com/Skalador/setup-wsl/blob/master/roles/packages/tasks/main.yaml)
 - [shell](https://github.com/Skalador/setup-wsl/blob/master/roles/shell/tasks/main.yaml)
 - [dev](https://github.com/Skalador/setup-wsl/blob/master/roles/dev/tasks/main.yaml)

@@ -45,7 +45,7 @@
     state: present
   register: create_docker_group
 
-- name: Add the current user "{{ user }}" to the 'docker' group
+- name: Add the current user to the 'docker' group
   become: true
   user:
     name: "{{ user }}"
@@ -58,7 +58,7 @@
 #   become: true
 #   become_user: "{{ user }}"
 
-- name: Switch to the 'docker' group for the current session "{{ user }}" and run the hello-world Docker container
+- name: Switch to the 'docker' group for the current session and run the hello-world Docker container
   command: newgrp docker && docker run hello-world
   become: true
   become_user: "{{ user }}"

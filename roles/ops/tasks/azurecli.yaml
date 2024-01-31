@@ -2,7 +2,9 @@
 ---
 - name: Install package dependencies.
   become: true
-  package: name={{ item }} state=present
+  package:
+    name: "{{ item }}"
+    state: present
   with_items:
     - ca-certificates
     - curl
@@ -16,20 +18,20 @@
     url: https://packages.microsoft.com/keys/microsoft.asc
     state: present
 
-- name: Get AZ_DIST variable
-  shell: lsb_release -cs
+- name: Get az_dist variable
+  ansible.builtin.command: lsb_release -cs
   register: az_dist_output
   changed_when: false
 
-- name: Set AZ_DIST fact
+- name: Set az_dist fact
   set_fact:
-    AZ_DIST: "{{ az_dist_output.stdout }}"
+    az_dist: "{{ az_dist_output.stdout }}"
   when: az_dist_output.stdout is defined
 
 - name: Add apt repository for stable version
   become: true
   apt_repository:
-    repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ AZ_DIST }} main
+    repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ az_dist }} main
     state: present
 
 - name: Install azure-cli

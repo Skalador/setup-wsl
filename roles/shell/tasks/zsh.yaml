@@ -7,10 +7,12 @@
   with_items:
     - curl
 
-- name: install zsh and friends
+- name: Install zsh and friends
   become: true
   become_user: root
-  package: name={{ item }}
+  package:
+    name: "{{ item }}"
+    state: present
   with_items:
     - git-core
     - powerline
@@ -22,26 +24,30 @@
     cmd: "getent passwd {{ lookup('env', 'USER') }} | cut -d: -f7"
   register: user_shell_result
 
-- name: change user shell to zsh
+- name: Change user shell to zsh
   become: true
   become_user: root
   command: chsh -s /bin/zsh {{ lookup('env', 'USER') }}
   when: "'/bin/zsh' not in user_shell_result.stdout"
 
 - name: Check for oh-my-zsh
-  stat: path=/$HOME/.oh-my-zsh
+  stat:
+    path: /$HOME/.oh-my-zsh
   register: ohmyzsh
 
-- name: install oh-my-zsh
+- name: Install oh-my-zsh
   shell: bash -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   when: not ohmyzsh.stat.exists
 
 - name: Check for dircolors
-  stat: path=/$HOME/.dircolors
+  stat:
+    path: /$HOME/.dircolors
   register: dircolors
 
 - name: Install dircolors
-  get_url: url=https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark dest=/$HOME/.dircolors
+  get_url:
+    url: https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark
+    dest: /$HOME/.dircolors
   when: not dircolors.stat.exists
 
 - name: Check for powerlevel10k
@@ -54,12 +60,15 @@
     msg: "Variable powerlevel10k contains: {{ powerlevel10k }}"
 
 - name: Clone powerlevel10k
-  command: git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k
+  ansible.builtin.git:
+    repo: 'https://github.com/romkatv/powerlevel10k.git'
+    depth: 1
+    dest: /$HOME/.oh-my-zsh/custom/themes/powerlevel10k
+    clone: true
   when: not powerlevel10k.stat.exists
-  # ignore_errors: true
 
 - name: Check if ~/.dircolors contains "DIR 34"
-  shell: "grep -q 'DIR 34' ~/.dircolors"
+  command: grep -q 'DIR 34' ~/.dircolors
   register: grep_result   # if the string is found, the return code is 0
   changed_when: false
   ignore_errors: true   # return code after the first run will be 1, thus ignore_errors for mutliple runs

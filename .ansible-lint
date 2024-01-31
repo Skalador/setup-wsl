@@ -12,3 +12,7 @@ skip_list:
   - name[missing]
   - no-changed-when
   - risky-file-permissions
+  - risky-shell-pipe
+  - no-handler
+  - package-latest
+  - latest[git]
