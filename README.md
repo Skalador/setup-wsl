@@ -29,11 +29,8 @@ Run the following:
 # Clone to your home directory
 git clone https://github.com/Skalador/setup-wsl.git
 
-# Installs ansible and dependencies
-sudo ./bootstrap.sh
-
-# Run the playbook
-ansible-playbook -K playbook.yaml
+# Installs dependencies and run the playbook
+make run
 ```
 
 ## What do you get?
@@ -46,17 +43,16 @@ This playbook contains four roles. Each role focuses on a specific capability. T
 
 # Testing
 
-Testing is done with [Molecule](https://ansible.readthedocs.io/projects/molecule/getting-started/#run-a-full-test-sequence). 
+Testing is done with [Molecule](https://ansible.readthedocs.io/projects/molecule/getting-started/#run-a-full-test-sequence) and [make](https://www.gnu.org/software/make/manual/make.html). 
 
 The entire playbook can be tested from the root of the repository with:
 ```bash
-molecule test
+make test
 ```
 
 Each role can be tested separately with
 ```bash
-cd roles/<role_name>/
-molecule test
+make test-$ROLENAME
 ```
 
-The [tests](https://github.com/Skalador/setup-wsl/blob/master/molecule/default/molecule.yaml) rely on docker images from [Jeff Geerling](https://github.com/geerlingguy). Those images  ensure the docker container behaves like a usual VM (systemd,...).
+The [tests](https://github.com/Skalador/setup-wsl/blob/master/molecule/default/molecule.yaml) rely on docker images from [Jeff Geerling](https://github.com/geerlingguy). Those images ensure the docker container behaves like a usual VM (systemd,...).
