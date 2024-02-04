@@ -1,4 +1,8 @@
 # Setup
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Skalador/setup-wsl/ci.yaml?branch=main&label=CI)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Skalador/setup-wsl/molecule-ci.yaml?branch=main&label=Molecule-CI)
+![GitHub License](https://img.shields.io/github/license/Skalador/setup-wsl)
+
 
 Ansible Playbooks for setting up a DevOps focused workstation.
 
