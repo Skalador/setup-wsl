@@ -10,7 +10,7 @@
   apt_repository:
     repo: deb https://baltocdn.com/helm/stable/debian/ all main
     state: present
-    filename: helm-stable-debian.list
+    filename: helm-stable-debian
 
 - name: Install helm
   become: true

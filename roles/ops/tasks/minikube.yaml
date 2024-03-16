@@ -1,4 +1,12 @@
 ---
+- name: Install package dependencies.
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - xz-utils
+
 - name: Check if /usr/bin/minikube exists
   stat:
     path: /usr/bin/minikube
