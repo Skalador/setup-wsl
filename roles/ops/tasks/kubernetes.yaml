@@ -15,6 +15,11 @@
 #   ansible.builtin.debug:
 #     msg: "{{ latest_kubernetes_version }}"
 
+- name: Check if /etc/apt/trusted.gpg.d/kubernetes-apt-keyring.asc exists
+  stat:
+    path: /etc/apt/trusted.gpg.d/kubernetes-apt-keyring.asc
+  register: kubernetes_apt_keyring
+
 - name: Add an apt signing key for Kubernetes
   become: true
   ansible.builtin.get_url:
@@ -24,6 +29,7 @@
     force: true
   when:
     - "latest_kubernetes_version is defined"
+    - "not kubernetes_apt_keyring.stat.exists"
 
 - name: Add apt repository for Kubernetes
   become: true
@@ -33,6 +39,7 @@
     filename: kubernetes
   when:
     - "latest_kubernetes_version is defined"
+    - "not kubernetes_apt_keyring.stat.exists"
 
 - name: Install kubeadm and kubectl
   become: true
@@ -67,38 +74,3 @@
   when: zshrc_file.stat.exists
 #  state: present
 #  create: yes
-
-# - name: Check for krew
-#   stat: path=/$HOME/.krew
-#   register: krew
-#
-# - name: Install krew
-#   shell: |
-#     set -x; cd "$(mktemp -d)" &&
-#     OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
-#     ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" &&
-#     curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.tar.gz" &&
-#     tar zxvf krew.tar.gz &&
-#     KREW=./krew-"${OS}_${ARCH}" &&
-#     "$KREW" install krew
-#   when: not krew.stat.exists
-#
-# - name: Get installed krew plugins
-#   command: "kubectl krew list"
-#   register: "krew_plugins"
-#
-# - name: Install krew plugins
-#   command: "kubectl krew install {{ item }}"
-#   when: "item|string not in krew_plugins.stdout_lines"
-#   with_items:
-#     - cert-manager
-#     - ctx
-#     - exec-cronjob
-#     - get-all
-#     - krew
-#     - ns
-#     - pod-dive
-#     - roll
-#     - snap
-#     - tail
-#     - view-utilization
