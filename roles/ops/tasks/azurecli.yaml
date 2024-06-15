@@ -19,7 +19,7 @@
   changed_when: false
   ansible.builtin.get_url:
     url: https://packages.microsoft.com/keys/microsoft.asc
-    dest: /etc/apt/keyrings/microsoft.asc
+    dest: /etc/apt/keyrings/microsoft.gpg
     mode: '0644'
     force: true
 
@@ -36,7 +36,7 @@
 - name: Add apt repository for stable version
   become: true
   apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.asc] https://packages.microsoft.com/repos/azure-cli/ {{ az_dist }} main"
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ {{ az_dist }} main"
     state: present
 
 - name: Install azure-cli
