@@ -1,4 +1,6 @@
 # source: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
+# Avoid apt-key due to deprecation: https://www.jeffgeerling.com/blog/2022/aptkey-deprecated-debianubuntu-how-fix-ansible
+# Note: recommended keyring location is /etc/apt/keyrings/ according to man 5 sources.list
 ---
 - name: Install package dependencies.
   become: true
@@ -14,9 +16,19 @@
 
 - name: Add an apt signing key for azure-cli
   become: true
-  apt_key:
+  changed_when: false
+  ansible.builtin.get_url:
     url: https://packages.microsoft.com/keys/microsoft.asc
-    state: present
+    dest: /etc/apt/keyrings/microsoft.asc
+    mode: '0644'
+    force: true
+
+- name: Add the key to the apt keyring
+  become: true
+  ansible.builtin.command: |
+    gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg /etc/apt/keyrings/microsoft.asc
+  args:
+    creates: /etc/apt/keyrings/microsoft.gpg
 
 - name: Get az_dist variable
   ansible.builtin.command: lsb_release -cs
@@ -31,7 +43,7 @@
 - name: Add apt repository for stable version
   become: true
   apt_repository:
-    repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ az_dist }} main
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ {{ az_dist }} main"
     state: present
 
 - name: Install azure-cli

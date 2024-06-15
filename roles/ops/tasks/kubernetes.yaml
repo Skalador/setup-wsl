@@ -15,16 +15,16 @@
 #   ansible.builtin.debug:
 #     msg: "{{ latest_kubernetes_version }}"
 
-- name: Check if /etc/apt/trusted.gpg.d/kubernetes-apt-keyring.asc exists
+- name: Check if /etc/apt/keyrings/kubernetes-apt-keyring.asc exists
   stat:
-    path: /etc/apt/trusted.gpg.d/kubernetes-apt-keyring.asc
+    path: /etc/apt/keyrings/kubernetes-apt-keyring.asc
   register: kubernetes_apt_keyring
 
 - name: Add an apt signing key for Kubernetes
   become: true
   ansible.builtin.get_url:
     url: "https://pkgs.k8s.io/core:/stable:/{{ latest_kubernetes_version }}/deb/Release.key"
-    dest: /etc/apt/trusted.gpg.d/kubernetes-apt-keyring.asc
+    dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
     mode: '0644'
     force: true
   when:
@@ -34,7 +34,7 @@
 - name: Add apt repository for Kubernetes
   become: true
   apt_repository:
-    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/{{ latest_kubernetes_version }}/deb/ /"
+    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/{{ latest_kubernetes_version }}/deb/ /"
     state: present
     filename: kubernetes
   when:
