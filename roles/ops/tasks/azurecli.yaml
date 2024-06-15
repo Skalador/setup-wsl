@@ -19,9 +19,16 @@
   changed_when: false
   ansible.builtin.get_url:
     url: https://packages.microsoft.com/keys/microsoft.asc
-    dest: /etc/apt/keyrings/microsoft.gpg
+    dest: /etc/apt/keyrings/microsoft.asc
     mode: '0644'
     force: true
+
+- name: Add the key to the apt keyring
+  become: true
+  ansible.builtin.command: |
+    gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg /etc/apt/keyrings/microsoft.asc
+  args:
+    creates: /etc/apt/keyrings/microsoft.gpg
 
 - name: Get az_dist variable
   ansible.builtin.command: lsb_release -cs
