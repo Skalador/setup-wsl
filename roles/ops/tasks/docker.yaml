@@ -11,6 +11,7 @@
       - apt-transport-https
       - ca-certificates
       - curl
+      - lsb-release
       - gnupg-agent
       - software-properties-common
 
@@ -20,10 +21,29 @@
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
 
+- name: Add an apt signing key for Docker
+  become: true
+  changed_when: false
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/trusted.gpg.d/docker.asc
+    mode: '0644'
+    force: true
+
+- name: Get os_codename variable
+  ansible.builtin.command: lsb_release -cs
+  register: os_codename_output
+  changed_when: false
+
+- name: Set os_codename fact
+  set_fact:
+    os_codename: "{{ os_codename_output.stdout }}"
+  when: os_codename_output.stdout is defined
+
 - name: Add apt repository for Docker stable version
   become: true
   apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable
+    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/ubuntu {{ os_codename }} stable"
     state: present
 
 - name: Install Docker and its dependecies
