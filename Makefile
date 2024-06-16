@@ -17,6 +17,7 @@ bootstrap: bootstrap.sh
 	sudo ./bootstrap.sh
 
 ansible: playbook.yaml
+	ansible-galaxy install -r requirements.yaml
 	ansible-playbook playbook.yaml --syntax-check
 	ansible-playbook -K playbook.yaml
 

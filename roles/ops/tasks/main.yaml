@@ -10,6 +10,8 @@
 - include_tasks: opentofu.yaml
 - include_tasks: k9s.yaml
 - include_tasks: skopeo.yaml
-- include_tasks: oc.yaml
+# - include_tasks: oc.yaml
+- import_role:
+    name: Skalador.oc_client
 - include_tasks: oc-mirror.yaml
 - include_tasks: butane.yaml
